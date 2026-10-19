@@ -4,10 +4,9 @@
 #include <stdbool.h>
 #include <string.h>
 #include <time.h>
-#include "include/config.h"
-#include "include/deck.h"
-#include "include/gamestate.h"
-#include "include/rng.h"
+#include "config.h"
+#include "rng.h"
+#include "gamestate.h"
 
 int pf_exception, pf_resolved, deckout;
 

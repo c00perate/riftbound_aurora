@@ -3,6 +3,7 @@
 #include <rng.h>
 #include <stdbool.h>
 #include <string.h>
+#include <stdio.h>
 
 extern int deckout;
 extern int pf_exception;
@@ -111,10 +112,10 @@ static void resolve_promising_future(GameState *gs, RNG *rng, int depth, bool *s
             if (peeked[i] != priority[p]) {
                 continue;
             }
-            if (priority[p] == CARD_AURORA && (gs->ready_runes < 2 || gs->exhausted_runes < 2)) {
+            if (priority[p] == CARD_AURORA && ((gs->ready_runes + gs->exhausted_runes) < 2)) {
                 continue;
             }
-            if (priority[p] == CARD_PROMISING_FUTURE && (gs->ready_runes < 1 || gs->exhausted_runes < 1)) {
+            if (priority[p] == CARD_PROMISING_FUTURE && ((gs->ready_runes + gs->exhausted_runes) < 1)) {
                 continue;
             }
             pick_idx = i;
@@ -236,11 +237,14 @@ int simulate_trial(int start_runes, RNG *rng) {
                     resolve_promising_future(&gs, rng, 0, &success);
                     pf_resolved++;
                     changed = true;
-                    if (success || can_cast_aurora(&gs)) { success = true; break; }
+                    if (success || can_cast_aurora(&gs)) { 
+                        success = true; 
+                        break; 
+                    }
                     continue;
                 }
             }
-            if (gs.hand_count[CARD_PLATEWYRM_EGG] > 0 && pay_cost(&gs, 3, 0) && gs.eggs_total == 0) {
+            if (gs.hand_count[CARD_PLATEWYRM_EGG] > 0 && gs.eggs_total == 0 && pay_cost(&gs, 3, 0)) {
                 gs.hand_count[CARD_PLATEWYRM_EGG]--;
                 gs.eggs_total += 1;
                 if (pay_cost(&gs, 1, 0)) {
@@ -252,7 +256,7 @@ int simulate_trial(int start_runes, RNG *rng) {
                 changed = true;
                 continue;
             }
-            if (gs.eggs_empowered < gs.eggs_total && pay_cost(&gs, 1, 0) && exhaustedEgg == false) {
+            if (gs.eggs_empowered < gs.eggs_total && exhaustedEgg == false && pay_cost(&gs, 1, 0)) {
                 gs.eggs_empowered += 1;
                 changed = true;
                 continue;

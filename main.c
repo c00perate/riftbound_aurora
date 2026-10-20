@@ -55,7 +55,7 @@ int main(int argc, char **argv) {
            100.0 * (double)hist3[MAX_TURN + 1] / (double)num_trials);
     
     printf("Activated PF: %d\n", pf_resolved);
-    printf("All 3 PF Chained: %d\n", pf_exception);
+    printf("PF Exception: %d\n", pf_exception);
     printf("Deckout: %d\n", deckout);
     return 0;
 }
